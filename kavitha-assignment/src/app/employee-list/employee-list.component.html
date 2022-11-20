@@ -1,0 +1,74 @@
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+  <h2 class="h2">Employees List</h2>
+  <a
+    routerLink="/register-employee"
+    class="btn btn-success"
+    *ngIf="hideWhenNoEmployee"
+  >
+    Add Employee
+  </a>
+</div>
+
+<div class="pricing-header mx-auto">
+  <div class="no-data text-center" *ngIf="preLoader">
+    <img src="assets/preloader.gif" class="preloader-icon" alt="No employee" />
+  </div>
+
+  <div class="no-data text-center" *ngIf="noData">
+    <img src="assets/no-employee.svg" class="nodata-msg" alt="No employee" />
+    <p class="nodata-msg">No employee added yet!</p>
+    <a routerLink="/register-employee" class="btn btn-success"> Add Employee </a>
+  </div>
+
+  <div class="table-responsive" *ngIf="hideWhenNoEmployee">
+    <table
+      class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Employee Id</th>
+          <th scope="col">Employee name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Mobile number</th>
+          <th scope="col">Designation</th>
+          <th scope="col">Salary</th>
+        
+          <th class="text-center" scope="col">Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let employee of Employee
+              | paginate: { itemsPerPage: 8, currentPage: p };
+            let i = index
+          "
+        >
+          <th scope="row">{{ employee.$key }}</th>
+          <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.mobileNumber }}</td>
+          <td>{{ employee.designation }}</td>
+          <td>{{ employee.salary}}</td>
+          
+          <td class="text-center action-block">
+            <span
+              class="mr-2 btn btn-outline-primary btn-sm"
+              routerLink="/edit-employee/{{ employee.$key }}"
+              >Edit</span
+            >
+            <span
+              class="btn btn-outline-danger btn-sm"
+              (click)="deleteEmployee(employee)"
+              >Delete</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
